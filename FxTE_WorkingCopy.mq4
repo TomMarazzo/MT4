@@ -11,7 +11,6 @@
 #include <stderror.mqh>
 
 
-
 #resource "\\Include\\Controls\\res\\Up.bmp"
 #resource "\\Include\\Controls\\res\\Down.bmp"
 #resource "\\Include\\Controls\\res\\RightTransp.bmp"
@@ -24,14 +23,13 @@
 #include <Controls/ComboBox.mqh>
 #include <Controls/Scrolls.mqh>
 
-CAppDialog Dashboard;
-CAppDialog Comp; 
-CAppDialog Menu;                            //Inside Dialog Box is Instanciated here
+CAppDialog Comp;//CDialog Comp;,//Menu;  
+CAppDialog Menu,Comp2;                            //Inside Dialog Box is Instanciated here
 CButton ShowPairBoxButton;
 CButton AddInstrumentBoxButton;                               //CButton gets us access to Button functionality
 CButton MainMenuButton;
 
-CLabel RS,NS,RX,AO_Peak,RYT_X,YS_Needed,SA,Pinch,SB;
+CLabel Pairs,RS,NS,RX,AO_Peak,RYT_X,YS_Needed,SA,Pinch,SB;
 CLabel OneM,FiveM,FifteenM,ThirtyM,OneH,FourH,D1,W1,MN;
 
 CEdit RS_1M;
@@ -40,13 +38,13 @@ CBmpButton OurBmpButton,ComponentBoxButton;
 
 CCheckGroup TimeFrames,TechIndicators;
 
-CComboBox PairsDropDown;
+//CComboBox PairsDropDown;
 
-CScrollV DashboardScrollBox;
+//CScrollV DashboardScrollBox;
 
-
-int Dashboard_Width=1600;
-int Dashboard_Height=700;
+CAppDialog Dashboard;
+int Dashboard_Width=1650;
+int Dashboard_Height=800;
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
@@ -61,8 +59,8 @@ int OnInit()
    Dashboard.Create(0,"FxTE Dashboard",0,0,0,Dashboard_Width,Dashboard_Height);               //This creates the Main Dialog box.
    Dashboard.Shift(5,25);
 
-DashboardScrollBox.Create(0,"ScrollBox",0,0,Dashboard_Width-200,Dashboard_Width,Dashboard_Height-200);               //This creates the Main Dialog box.
-DashboardScrollBox.Shift(15,35);
+//DashboardScrollBox.Create(0,"ScrollBox",0,0,Dashboard_Width-200,Dashboard_Width,Dashboard_Height-200);               //This creates the Main Dialog box.
+//DashboardScrollBox.Shift(15,35);
 
 
 //Comp2.Create(0,"",0,0,0,(Dashboard_Width-350),255);                     //This creates the Interior Dialog box.
@@ -70,8 +68,8 @@ DashboardScrollBox.Shift(15,35);
 
 
 //---Main Menu Box
-   Menu.Create(0,"Menu",0,0,0,330,270);
-   Menu.Shift(1260,50);
+   Menu.Create(0,"Menu",0,0,0,350,260);
+   Menu.Shift(650,310);
 
 //+------------------------------------------------------------------+
 //|         BmpButtons                                               |
@@ -80,7 +78,7 @@ DashboardScrollBox.Shift(15,35);
    OurBmpButton.Create(0,"OurBmpButton",0,0,0,0,0);
    OurBmpButton.BmpNames("::Include\\Controls\\res\\Up.bmp","::Include\\Controls\\res\\Down.bmp");
    Dashboard.Add(OurBmpButton);
-   OurBmpButton.Shift(Dashboard_Width-68,-18);
+   OurBmpButton.Shift(1585,-18);
 
 //+------------------------------------------------------------------+
 //|         BUTTONS                                                  |
@@ -96,7 +94,7 @@ DashboardScrollBox.Shift(15,35);
    MainMenuButton.Shift(15,5);
 
 //---Show/Hide Instrument Box
-   ShowPairBoxButton.Create(0,"ShowPairBoxButton",0,0,0,120,20);
+   ShowPairBoxButton.Create(0,"ShowPairBoxButton",0,0,0,110,20);
    ShowPairBoxButton.Color(clrRed);
    ShowPairBoxButton.Width(110);
    ShowPairBoxButton.Height(40);
@@ -260,6 +258,7 @@ void OnChartEvent(const int id,
    if(id==CHARTEVENT_OBJECT_CLICK && sparam=="AddInstrumentBoxButton")
      {
       Component();
+
      }
 
 //+------------------------------------------------------------------+
@@ -328,7 +327,7 @@ void OnChartEvent(const int id,
         }
    else
      {
-      Comp.Height(270);
+      Comp.Height(235);
       //PairsDropDown.Show();
       OneM.Show();
       OneM.Show();
@@ -443,12 +442,12 @@ void OnChartEvent(const int id,
       if(RS.IsVisible())
         {
          RS.Hide();
-         //Comp.Width(1285);
+         Comp.Width(1285);
         }
       else
         {
          RS.Show();
-         //Comp.Width(1300);
+         Comp.Width(1300);
         }
      }
    if(id==CHARTEVENT_OBJECT_CLICK && x=="NS")
@@ -515,30 +514,35 @@ void OnChartEvent(const int id,
 //+------------------------------------------------------------------+
 //|                  FUNCTIONS                                       |
 //+------------------------------------------------------------------+
+
 int numOfPairs()
   {
    int num=SymbolsTotal(0);
-   printf("There are "+ num +" Pairs with this Broker");
+   printf("There are "+num+" Pairs with this Broker");
+
    return num;
   }
 //+------------------------------------------------------------------+
 
 void Component()
   {
-long Pairs;
+//CComboBox PairsDropDown;
+
+
+
 //---Timeframe Labels Adjustments 
    int TF_x = 40;
    int TF_y = 20;
 //---Indicator Labels Adjustments  
-   int TI_x=50;
-   int TI_y=0;                         //"-22" was teh number used before using this var
+   int TI_x=100;
+   int TI_y=0; //"-22" was teh number used before using this var
 
 //---Bmp Up/Down Arrow button
-   int arrow_x = 1088;
+   int arrow_x = 1238;
    int arrow_y = -17;
 
 //---Template of First Instrument Box
-   Comp.Create(0,"",0,0,0,(Dashboard_Width-450),270);                     //This creates the Interior Dialog box.
+   Comp.Create(0,"",0,0,0,(Dashboard_Width-350),270);                     //This creates the Interior Dialog box.
    Comp.Shift(10,100);
 
 //--- BmpButtons 
@@ -547,19 +551,17 @@ long Pairs;
    Comp.Add(ComponentBoxButton);
    ComponentBoxButton.Shift(arrow_x,arrow_y);
 
+//PairsDropDown.Create(0,"OurListView",0,5,10,125,40);
+//PairsDropDown.Shift(10,5);
+//numOfPairs();
+//for(int i=0; i<=numOfPairs();i++)
+//  {
+//   string Pairs=PairsDropDown.AddItem(SymbolName(i,0));
+//   printf(Symbol());
+//  }
 
+//Comp.Add(PairsDropDown);
 
-   PairsDropDown.Create(0,"PairsDropDown",0,5,10,110,30);
-   PairsDropDown.Shift(150,-30);
-   
-  
-   for(int i=0; i<=numOfPairs();i++)
-     {
-      PairsDropDown.AddItem((SymbolName(i,0)),0);
-      Pairs = PairsDropDown.SelectByValue(Symbol());
-      printf(Symbol());
-     }
-   Comp.Add(PairsDropDown);
 //--- Timeframe -Vertical Labels--// 
 
 //---1M Label
@@ -684,7 +686,7 @@ long Pairs;
    NS.FontSize(10);
    NS.Font("Arial Bold");
    Comp.Add(NS);
-   NS.Shift(TI_x+295,TI_y); //TI_x
+   NS.Shift((TI_x+295),TI_y);
 
 //---RX Label
 
@@ -756,20 +758,5 @@ long Pairs;
    Comp.Add(SB);
    SB.Shift((TI_x+1020),TI_y);
 
-
-//CComboBox PairsDropDown; 
-//PairsDropDown.Create(0,"ListView",0,0,0,125,40);
-//PairsDropDown.Shift(10,0);
-//numOfPairs();
-//for(int i=0; i<=numOfPairs();i++)
-//  {
-//   string Pairs=PairsDropDown.AddItem(SymbolName(i,0));
-//   printf(Symbol());
-//   Comp.Add(PairsDropDown);
-//  }
-
   }
-
-
-
 //+------------------------------------------------------------------+
